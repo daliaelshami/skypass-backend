@@ -5,7 +5,7 @@ const flightSchema = new mongoose.Schema({
     flightNumber: {
         type: String,
         required: [true, 'Flight number is required'],
-        uniquee: true,
+        unique: true,
     },
 
 
@@ -25,7 +25,7 @@ const flightSchema = new mongoose.Schema({
 
     airplane: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Airport',
+        ref: 'Airplane',
         required: true,
     },
 
