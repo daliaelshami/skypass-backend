@@ -1,7 +1,12 @@
 const jwt = require('jsonwebtoken');
-const User = require('../modules/auth/user.model');
+// jsonwebtoken → مكتبة للتحقق وإنشاء الـJWT (Token).
+const User = require('../modules/auth/user.model'); 
+// User → موديل المستخدم من قاعدة البيانات (MongoDB غالبًا).
 const AppError = require('../utils/AppError');
+// AppError → كلاس مخصص للأخطاء، بيخلي التحكم في الأخطاء أسهل.
 
+
+// Middleware حماية الـRoutes
 const protect = async (req, res, next) => {
     try {
         const token = req.headers.authorization?.split(' ')[1];
