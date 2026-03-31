@@ -1,10 +1,6 @@
-// نستخدمه لإنشاء Schema و Model للتعامل مع قاعدة بيانات MongoDB.
 const mongoose = require('mongoose');
-// دي لتشفير الباسورد قبل حفظها في قاعده البيانات
 const bcrypt = require('bcryptjs');
 
-
-// شكل الي بيحزن فيه البيانات في قاعده البيانات
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -22,7 +18,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Password is required'],
     minlength: 6,
-    select: false,
+    select: false, 
   },
   role: {
     type: String,

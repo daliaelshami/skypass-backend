@@ -1,14 +1,14 @@
-const Booking = require('./booking.model');
-const Flight = require('../flights/flight.model');
+const Booking = require('../models/booking.model');
+const Flight = require('../models/flight.model');
+const AppError = require('../utils/AppError');
 
 exports.createBooking = async (req, res, next) => {
     try {
         const { flightId, seatClass } = req.body;
 
         const flight = await Flight.findById(flightId);
-
         if (!flight) {
-            return res.status(404).json({ message: "Flight not found" });
+            return next(new AppError('Flight not found', 404));
         }
 
         let seatField = 'economySeatsAvailable';
@@ -20,7 +20,7 @@ exports.createBooking = async (req, res, next) => {
         }
 
         if (flight[seatField] <= 0) {
-            return res.status(400).json({ message: "No seats available" });
+            return next(new AppError('No seats available for the selected class', 400));
         }
 
         const booking = await Booking.create({
@@ -30,14 +30,13 @@ exports.createBooking = async (req, res, next) => {
             totalPrice: price
         });
 
-        flight[seatField] = flight[seatField] - 1;
+        flight[seatField] -= 1;
         await flight.save();
 
         res.status(201).json({
             status: 'success',
             data: booking
         });
-
     } catch (err) {
         next(err);
     }
@@ -45,13 +44,17 @@ exports.createBooking = async (req, res, next) => {
 
 exports.getMyBookings = async (req, res, next) => {
     try {
-        const bookings = await Booking.find({ user: req.user.id }).populate("flight");
+        const bookings = await Booking.find({ user: req.user.id })
+            .populate({
+                path: 'flight',
+                populate: { path: 'origin destination' }
+            });
 
         res.status(200).json({
             status: 'success',
+            results: bookings.length,
             data: bookings
         });
-
     } catch (err) {
         next(err);
     }
