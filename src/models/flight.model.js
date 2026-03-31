@@ -1,10 +1,6 @@
-// تسجيل الموديلات عشان السيرفر يعرفهم
-const mongoose = require('mongoose'); 
-require('../airports/airport.model');
-require('../airplanes/airplane.model');
-const { required } = require('zod/mini');
-const flightSchema = new mongoose.Schema({
+const mongoose = require('mongoose');
 
+const flightSchema = new mongoose.Schema({
     flightNumber: {
         type: String,
         required: [true, 'Flight number is required'],
@@ -51,10 +47,9 @@ const flightSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['Scheduled', 'On Time', 'Delayed', 'Completed', 'Cancelled'],
-        default: 'Scheduled',
-    },
-
-
+        enum: ['Scheduled', 'Delayed', 'Cancelled', 'Completed'],
+        default: 'Scheduled'
+    }
 }, { timestamps: true });
+
 module.exports = mongoose.model('Flight', flightSchema);

@@ -5,4 +5,5 @@ const airportSchema = new mongoose.Schema({
     code: { type: String, required: true, unique: true },
     city: { type: String, required: true },
 }, { timestamps: true });
+
 module.exports = mongoose.models.Airport || mongoose.model('Airport', airportSchema);
